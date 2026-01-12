@@ -52,17 +52,86 @@ I evaluate models **WITH** and **WITHOUT** this feature to quantify reliance and
 - **Best Macro-F1:** **0.617** (Decision Tree)  
 - **Best Accuracy:** **0.704** (Decision Tree)
 
+| Model               | Accuracy  | Precision (Macro) | Recall (Macro) | F1 (Macro) | F1 (Weighted) | ROC-AUC (Macro OVR) | PR-AUC (Macro) |
+| ------------------- | --------- | ----------------- | -------------- | ---------- | ------------- | ------------------- | -------------- |
+| Decision Tree       | **0.704** | **0.900**         | 0.557          | **0.617**  | **0.681**     | 0.852               | 0.626          |
+| LightGBM            | 0.679     | 0.687             | 0.562          | 0.595      | 0.666         | 0.852               | 0.693          |
+| Logistic Regression | 0.682     | 0.759             | 0.556          | 0.602      | 0.668         | 0.854               | 0.696          |
+| Random Forest       | 0.691     | 0.762             | **0.566**      | 0.610      | 0.678         | 0.851               | **0.699**      |
+| XGBoost             | 0.689     | 0.795             | 0.554          | 0.605      | 0.670         | **0.855**           | **0.699**      |
+
 ### WITHOUT `Item Purchased` (behaviour-only scenario)
 - **Best Macro-F1:** **0.240** (LightGBM)  
 - **Best Accuracy:** **0.448** (Random Forest)
+
+
+| Model               | Accuracy  | Precision (Macro) | Recall (Macro) | F1 (Macro) | F1 (Weighted) |
+| ------------------- | --------- | ----------------- | -------------- | ---------- | ------------- |
+| Decision Tree       | 0.395     | 0.183             | 0.235          | 0.196      | 0.320         |
+| Random Forest       | **0.448** | 0.179             | 0.247          | 0.187      | 0.314         |
+| Logistic Regression | 0.432     | 0.284             | **0.260**      | 0.219      | 0.350         |
+| XGBoost             | 0.415     | 0.211             | 0.247          | 0.203      | 0.329         |
+| LightGBM            | 0.393     | **0.265**         | 0.255          | **0.240**  | **0.355**     |
 
 <p align="center">
   <img src="reports/figures/WITH_Item_Purchased_test_f1_macro.png" width="900" />
 </p>
 
 <p align="center">
-  <img src="reports/figures/WITHOUT_Item_Purchased_LightGBM_test_f1_macro.png" width="900" />
+  <img src="reports/figures/WITHOUT_Item_Purchased_test_f1_macro.png" width="900" />
 </p>
+
+🧪 Statistical validation (beyond accuracy)
+Baseline vs Models (Wilcoxon test)
+
+All models significantly outperform the majority-class baseline:
+
+| Metric   | Model               | Mean Model | Mean Baseline | p (Holm)   | Effect size (r) |
+| -------- | ------------------- | ---------- | ------------- | ---------- | --------------- |
+| Macro-F1 | Decision Tree       | 0.666      | 0.154         | **0.0016** | **0.88**        |
+| Macro-F1 | LightGBM            | 0.649      | 0.154         | **0.0016** | **0.88**        |
+| Macro-F1 | Logistic Regression | 0.656      | 0.154         | **0.0016** | **0.88**        |
+| Macro-F1 | Random Forest       | 0.671      | 0.154         | **0.0016** | **0.88**        |
+| Macro-F1 | XGBoost             | 0.660      | 0.154         | **0.0016** | **0.88**        |
+
+
+
+Cross-model significance (Friedman + Wilcoxon)
+
+The Friedman test confirms overall model differences:
+
+| Metric   | χ²    | p-value      | Significant |
+| -------- | ----- | ------------ | ----------- |
+| Macro-F1 | 29.71 | **0.000006** | ✅           |
+
+
+Key pairwise results (Holm-corrected):
+| Model A             | Model B       | p (Holm)   | Effect size |
+| ------------------- | ------------- | ---------- | ----------- |
+| LightGBM            | Random Forest | **0.0066** | **0.88**    |
+| Logistic Regression | Random Forest | **0.0264** | **0.75**    |
+| Random Forest       | XGBoost       | **0.0271** | **0.73**    |
+
+This supports H₁₃ (models differ meaningfully).
+
+
+🔍 Feature importance (model-based)
+
+Across all models, Item Purchased is ranked #1, confirming it acts as a proxy for Category.
+
+Top features (example):
+| Rank | Feature                | Model                         |
+| ---- | ---------------------- | ----------------------------- |
+| 1    | Item Purchased         | Decision Tree / RF / LightGBM |
+| 2    | Purchase Amount (USD)  | Tree-based                    |
+| 3    | Payment Method         | Tree-based                    |
+| 4    | Review Rating          | Tree-based                    |
+| 5    | Frequency of Purchases | LightGBM                      |
+
+
+
+
+
 
 ---
 
