@@ -136,6 +136,22 @@ Top features (example):
 
 ## Credibility checks (beyond a single score)
 ### Bootstrap uncertainty (95% CI on Macro-F1)
+## 🧪 Uncertainty & Statistical Reliability
+
+Model performance is not reported as single point estimates. Uncertainty and statistical significance are explicitly quantified.
+
+### Bootstrap confidence intervals (Macro-F1)
+Each model’s Macro-F1 is bootstrapped 1,000 times on the test set to estimate 95% confidence intervals.
+
+<p align="center">
+  <img src="reports/figures/s12_bootstrap_ci_f1_with.png" width="450" />
+  <img src="reports/figures/s12_bootstrap_ci_f1_without.png" width="450" />
+</p>
+
+These intervals show:
+- Narrow uncertainty in the **WITH Item Purchased** scenario
+- Substantially wider uncertainty when the proxy feature is removed, reflecting real-world instability
+
 <p align="center">
   <img src="reports/figures/s12_bootstrap_ci_f1_with.png" width="450" />
   <img src="reports/figures/s12_bootstrap_ci_f1_without.png" width="450" />
@@ -157,6 +173,7 @@ Macro-F1 is evaluated across slices to detect instability or uneven performance.
 </p>
 
 > Note: Location-level slices can be noisy when support is small. Interpret gaps alongside sample counts.
+
 
 ---
 
