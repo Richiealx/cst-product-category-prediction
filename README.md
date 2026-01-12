@@ -167,6 +167,26 @@ These intervals show:
 ## Slice parity sanity checks
 Macro-F1 is evaluated across slices to detect instability or uneven performance.
 
+## 📊 Paired Significance Testing (McNemar)
+
+To determine whether performance differences are real or due to chance, McNemar’s test is applied to the same test instances.
+
+### WITH `Item Purchased`
+Decision Tree vs XGBoost  
+p = 0.143 → no statistically significant difference  
+
+### WITHOUT `Item Purchased`
+LightGBM vs Logistic Regression  
+p = 0.077 → borderline but not significant  
+
+### Cross-scenario stability
+Each model was compared WITH vs WITHOUT `Item Purchased`.  
+All models showed **p < 0.001**, confirming that removing the proxy feature causes a **real and statistically significant collapse in performance**.
+
+<p align="center">
+  <img src="reports/figures/s12_mcnemar_bubble_with.png" width="600" />
+</p>
+
 <p align="center">
   <img src="reports/figures/s12_parity_Gender_with.png" width="450" />
   <img src="reports/figures/s12_parity_Season_with.png" width="450" />
@@ -174,6 +194,23 @@ Macro-F1 is evaluated across slices to detect instability or uneven performance.
 
 > Note: Location-level slices can be noisy when support is small. Interpret gaps alongside sample counts.
 
+
+
+## ⚖️ Slice Parity & Stability Checks
+
+Macro-F1 is evaluated across demographic and behavioural slices to detect instability or bias.
+
+<p align="center">
+  <img src="reports/figures/s12_parity_Gender_with.png" width="420" />
+  <img src="reports/figures/s12_parity_Season_with.png" width="420" />
+</p>
+
+Key findings:
+- **Gender gap (WITH):** 0.021 → stable and fair
+- **Season gap (WITH):** 0.125 → moderate seasonal variation
+- **Location gap (WITH):** large, but driven by small-sample states (e.g., Illinois n=7)
+
+After removing `Item Purchased`, slice gaps remain small for Gender and Season, confirming that performance collapse is not driven by demographic bias but by loss of proxy information.
 
 ---
 
