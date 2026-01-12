@@ -81,10 +81,10 @@ I evaluate models **WITH** and **WITHOUT** this feature to quantify reliance and
   <img src="reports/figures/WITHOUT_Item_Purchased_test_f1_macro.png" width="900" />
 </p>
 
-🧪 Statistical validation (beyond accuracy)
-Baseline vs Models (Wilcoxon test)
+### 🧪 Statistical validation (beyond accuracy)
+### Baseline vs Models (Wilcoxon test)
 
-All models significantly outperform the majority-class baseline:
+### All models significantly outperform the majority-class baseline:
 
 | Metric   | Model               | Mean Model | Mean Baseline | p (Holm)   | Effect size (r) |
 | -------- | ------------------- | ---------- | ------------- | ---------- | --------------- |
@@ -96,16 +96,16 @@ All models significantly outperform the majority-class baseline:
 
 
 
-Cross-model significance (Friedman + Wilcoxon)
+### Cross-model significance (Friedman + Wilcoxon)
 
-The Friedman test confirms overall model differences:
+### The Friedman test confirms overall model differences:
 
 | Metric   | χ²    | p-value      | Significant |
 | -------- | ----- | ------------ | ----------- |
 | Macro-F1 | 29.71 | **0.000006** | ✅           |
 
 
-Key pairwise results (Holm-corrected):
+### Key pairwise results (Holm-corrected):
 | Model A             | Model B       | p (Holm)   | Effect size |
 | ------------------- | ------------- | ---------- | ----------- |
 | LightGBM            | Random Forest | **0.0066** | **0.88**    |
@@ -115,9 +115,9 @@ Key pairwise results (Holm-corrected):
 This supports H₁₃ (models differ meaningfully).
 
 
-🔍 Feature importance (model-based)
+### 🔍 Feature importance (model-based)
 
-Across all models, Item Purchased is ranked #1, confirming it acts as a proxy for Category.
+### Across all models, Item Purchased is ranked #1, confirming it acts as a proxy for Category.
 
 Top features (example):
 | Rank | Feature                | Model                         |
@@ -127,7 +127,6 @@ Top features (example):
 | 3    | Payment Method         | Tree-based                    |
 | 4    | Review Rating          | Tree-based                    |
 | 5    | Frequency of Purchases | LightGBM                      |
-
 
 
 
